@@ -1,30 +1,38 @@
-public static Minecraft_Processing_Edition root;
-public HashMap<Integer, AnimatedImage> Blocks;
+public Assets assetsManager;
+public Blocks blockManager;
 
 void setup() {
-  root = this;
-  size(500, 500);
+  // Initialise the assets interface
+  assetsManager = new Assets("2D-Minecraft-Processing-Edition");
 
-  Blocks = new HashMap<Integer, AnimatedImage>();
-  File[] imgFiles = getFilesInDirectory("Assets/Block");
+  // load all default blocks.
+  blockManager = new Blocks("BlockSpriteSheets");
+
+  // set size of screen
+  size(500, 500);
 }
 
 void draw() {
-}
-
-File[] getFilesInDirectory(File dir) {
-  return dir.listFiles(new FileExtFilter(".png").pictsFilter);
-}
-
-PImage[] getSpritesFromSheet(PImage src, int tX, int tY, int rX, int rY) {
-  PImage[] result = new PImage[tX * tY];
-  for (int x = 0; x < tX; x++) {
-    for (int y = 0; y < tY; y++) {
-      int xCoord = x * rX;
-      int yCoord = y * rY;
-      result[y * tX + x] = src.get(xCoord, yCoord, rX, rY);
+  background(0, 25, 0);
+  if (keyPressed) {
+    if (key == 'p') {
+      drawAllBlocks();
     }
   }
+}
 
-  return result;
+void drawAllBlocks() {
+  int x = 0;
+  int y = 0;
+  for (AnimatedImage img : blockManager.blocks.values()) {
+    for (PImage tile : img.getSprites()) {
+      image(tile, x * 64, y * 64, 64, 64);
+      x++;
+
+      if (x * 64 >= width) {
+        x=0;
+        y++;
+      }
+    }
+  }
 }

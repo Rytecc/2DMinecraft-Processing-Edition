@@ -11,22 +11,24 @@ class AnimatedImage {
     drawIndex = startIndex;
   }
 
-  public void tickAnimatedImage() {
-    if (delay >= 0f) {
-      delay -= 1f / 60f;
-    } else {
-      delay = 1f / tileRate;
-      drawIndex++;
-
-      if (drawIndex == sprites.length) {
-        drawIndex = 0;
-      }
-    }
-
-    Minecraft_Processing_Edition.root.image(sprites[drawIndex], 0, 0, 0, 0);
-  }
-
   public int getDrawIndex() {
     return drawIndex;
+  }
+
+  public void setDrawIndex(int i) {
+    if (i < 0 || i >= sprites.length) {
+      println("Invalid index set for animated image with size of (" + sprites.length + ") >> " + i);
+      return;
+    }
+
+    drawIndex = i;
+  }
+
+  public PImage[] getSprites() {
+    return sprites;
+  }
+
+  public PImage getCurrentSprite() {
+    return sprites[drawIndex];
   }
 }
