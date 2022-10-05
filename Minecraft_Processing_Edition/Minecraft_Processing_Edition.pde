@@ -1,15 +1,14 @@
 public Assets assetsManager;
 public Blocks blockManager;
-
+Chunk c;
 void setup() {
+  fullScreen();
   // Initialise the assets interface
   assetsManager = new Assets("2D-Minecraft-Processing-Edition");
 
   // load all default blocks.
   blockManager = new Blocks("BlockSpriteSheets");
-
-  // set size of screen
-  size(500, 500);
+  c = new Chunk(0);
 }
 
 void draw() {
@@ -19,6 +18,8 @@ void draw() {
       drawAllBlocks();
     }
   }
+
+  c.drawChunk();
 }
 
 void drawAllBlocks() {
