@@ -1,8 +1,9 @@
 public static final int chunkHeight = 256;
 public static final int chunkWidth = 16;
-public static final int noiseIntensity = 2;
+public static final int noiseIntensity = 5;
 public static final int noiseOffset = 0;
-public static final int heightOffset = 5;
+public static final int heightOffset = 30;
+public static final float noiseScale = .2f;
 
 class BlockDrawCall {
   public BlockDrawCall(String id, int variantid) {
@@ -17,7 +18,6 @@ class BlockDrawCall {
 class Chunk {
   public BlockDrawCall[][] Blocks;
   private int xCoord;
-  public boolean isReady;
   public Chunk(int xCoord) {
     this.xCoord = xCoord;
     Blocks = new BlockDrawCall[chunkWidth][chunkHeight];
@@ -27,7 +27,7 @@ class Chunk {
   void generateChunk() {
     for (int x = 0; x < chunkWidth; x++) {
       int columnCoord = xCoord * chunkWidth + x;
-      int n = int(noise(columnCoord + noiseOffset) * noiseIntensity) + heightOffset;
+      int n = int(noise((columnCoord + noiseOffset) * noiseScale) * noiseIntensity) + heightOffset;
 
       //limit the N value to prevent index out of range exceptions
       if (n >= chunkHeight) {
@@ -41,11 +41,9 @@ class Chunk {
         if (y <= n - 3)
           Blocks[x][y] = getDrawCallforID("stone.png");
         else
-          Blocks[x][y] = getDrawCallforID("grass.png");
+          Blocks[x][y] = getDrawCallforID("dirt.png");
       }
     }
-
-    isReady = true;
   }
 
   BlockDrawCall getDrawCallforID(String id) {
@@ -54,15 +52,13 @@ class Chunk {
   }
 
   void drawChunk() {
-    if (isReady) {
-      for (int x = 0; x < Blocks.length; x++) {
-        for (int y = 0; y < Blocks[x].length; y++) {
-          int xPos = (xCoord * chunkWidth + x) * 64;
-          BlockDrawCall call = Blocks[x][y];
+    for (int x = 0; x < Blocks.length; x++) {
+      for (int y = 0; y < Blocks[x].length; y++) {
+        int xPos = (xCoord * chunkWidth + x) * 64;
+        BlockDrawCall call = Blocks[x][y];
 
-          if (call != null) {
-            image(blockManager.blocks.get(call.blockID).getSprites()[0], xPos, height - y * 64, 64, 64);
-          }
+        if (call != null) {
+          image(blockManager.blocks.get(call.blockID).getSprites()[0], xPos + cameraX, (height - y * 64) + cameraY, 64, 64);
         }
       }
     }
