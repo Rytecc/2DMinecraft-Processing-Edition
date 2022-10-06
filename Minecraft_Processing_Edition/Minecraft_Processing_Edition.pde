@@ -14,6 +14,10 @@ void setup() {
   // load all default blocks.
   blockManager = new Blocks("BlockSpriteSheets");
   chunks = new HashMap<Integer, Chunk>();
+  
+  for(int x = -renderWidth; x <= renderWidth; x++) {
+    chunks.put(x, new Chunk(x));
+  }
 }
 
 void draw() {
@@ -43,12 +47,7 @@ void moveCamera() {
 }
 
 void drawChunks() {
-  for (int x = cameraXCoord + renderWidth; x >= cameraXCoord - renderWidth; x--) {
-    if (chunks.containsKey(x)) {
-      chunks.get(x).drawChunk();
-    } else {
-      chunks.put(x, new Chunk(x));
-    }
+  for(int x = cameraXCoord - renderWidth; x <= cameraXCoord + renderWidth; x++) {
   }
 }
 

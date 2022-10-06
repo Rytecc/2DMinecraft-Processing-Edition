@@ -52,6 +52,7 @@ class Chunk {
   }
 
   void drawChunk() {
+    println("Draw Chunk: " + xCoord);
     for (int x = 0; x < Blocks.length; x++) {
       for (int y = 0; y < Blocks[x].length; y++) {
         int xPos = (xCoord * chunkWidth + x) * 64;
