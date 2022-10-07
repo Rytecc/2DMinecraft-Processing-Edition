@@ -1,53 +1,61 @@
-public static int cameraX;
-public static int cameraY = 25 * 64;
-public static int cameraXCoord;
-public static int cameraSpeed = 5;
+//Lucas Soliman
+// Minecraft Processing Edition
+// This file delegates all core functionalities of game.
+
 public static final int renderWidth = 4;
+
 public Assets assetsManager;
 public Blocks blockManager;
 public HashMap<Integer, Chunk> chunks;
+
 void setup() {
-  size(1280, 720);
+
+  // set screen default size
+  fullScreen();
+
   // Initialise the assets interface
   assetsManager = new Assets("2D-Minecraft-Processing-Edition");
 
-  // load all default blocks.
+  // load all default blocks and create hashmap for chunks to be rendered.
   blockManager = new Blocks("BlockSpriteSheets");
   chunks = new HashMap<Integer, Chunk>();
-  
-  for(int x = -renderWidth; x <= renderWidth; x++) {
+
+  //Create the initial generation
+  for (int x = -renderWidth * 10; x <= renderWidth * 10; x++) {
     chunks.put(x, new Chunk(x));
   }
 }
 
 void draw() {
+  // set background to bright blue (day)
   background(25, 200, 255);
-  moveCamera();
-  drawChunks();
-  
-  text("x: " + cameraX + "\n" + "y: " + cameraY + "\n" + "currentXCoord: " + cameraXCoord, 50, 50);
-}
 
-void moveCamera() {
+  // Press p to see all blocks available
   if (keyPressed) {
-    if (key == 'a') {
-      cameraX += cameraSpeed;
-    } else if (key == 'd') {
-      cameraX -= cameraSpeed;
-    }
-    
-    if(key == 'w') {
-      cameraY += cameraSpeed;
-    } else if(key == 's') {
-      cameraY -= cameraSpeed;
+    if (key == 'p') {
+      drawAllBlocks();
+      return;
     }
   }
 
-  cameraXCoord = cameraX / (64 * chunkWidth);
+  //move camera and draw chunks relative to camera.
+  moveCamera();
+  drawChunks();
+
+  //display some debug information
+  text("x: " + (-cameraX) + "\n" + "y: " + cameraY + "\n" + "currentXCoord: " + cameraXCoord, 50, 50);
 }
 
 void drawChunks() {
-  for(int x = cameraXCoord - renderWidth; x <= cameraXCoord + renderWidth; x++) {
+
+  //Iterate over the surroundings of the camera chunk coordinates
+  for (int x = cameraXCoord - renderWidth; x <= cameraXCoord + renderWidth; x++) {
+    //Check if the current iterated coordinate is assigned a chunk value
+    if (chunks.containsKey(-x)) {
+      chunks.get(-x).drawChunk();
+    } else {
+      chunks.put(-x, new Chunk(-x));
+    }
   }
 }
 
@@ -64,5 +72,6 @@ void drawAllBlocks() {
         y++;
       }
     }
+    x++;
   }
 }

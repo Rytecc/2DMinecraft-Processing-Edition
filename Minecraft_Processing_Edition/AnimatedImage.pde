@@ -3,12 +3,21 @@ class AnimatedImage {
   private float tileRate;
   private float delay;
   private int drawIndex;
-
+  private boolean valid;
   public AnimatedImage(PImage[] sprites, float tileRate, int startIndex) {
     this.sprites = sprites;
     this.tileRate = tileRate;
     delay = 1f / tileRate;
     drawIndex = startIndex;
+    for (PImage img : sprites) {
+      if (img == null) {
+        println("ANIMATED IMAGE IS INVALID!");
+        valid = false;
+        return;
+      }
+
+      valid = true;
+    }
   }
 
   public int getDrawIndex() {

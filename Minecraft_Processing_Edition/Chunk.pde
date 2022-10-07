@@ -1,9 +1,9 @@
 public static final int chunkHeight = 256;
 public static final int chunkWidth = 16;
-public static final int noiseIntensity = 5;
+public static final int noiseIntensity = 10;
 public static final int noiseOffset = 0;
 public static final int heightOffset = 30;
-public static final float noiseScale = .2f;
+public static final float noiseScale = .1f;
 
 class BlockDrawCall {
   public BlockDrawCall(String id, int variantid) {
@@ -41,25 +41,24 @@ class Chunk {
         if (y <= n - 3)
           Blocks[x][y] = getDrawCallforID("stone.png");
         else
-          Blocks[x][y] = getDrawCallforID("dirt.png");
+          Blocks[x][y] = getDrawCallforID("stone.png");
       }
     }
   }
 
   BlockDrawCall getDrawCallforID(String id) {
-    int upperBound = blockManager.blocks.get("grass.png").getSprites().length;
-    return new BlockDrawCall(id, (int)random(0, upperBound));
+    int upperBound = blockManager.blocks.get(id).getSprites().length;
+    return new BlockDrawCall(id, int(random(upperBound)));
   }
 
   void drawChunk() {
-    println("Draw Chunk: " + xCoord);
     for (int x = 0; x < Blocks.length; x++) {
       for (int y = 0; y < Blocks[x].length; y++) {
         int xPos = (xCoord * chunkWidth + x) * 64;
         BlockDrawCall call = Blocks[x][y];
 
         if (call != null) {
-          image(blockManager.blocks.get(call.blockID).getSprites()[0], xPos + cameraX, (height - y * 64) + cameraY, 64, 64);
+          image(blockManager.blocks.get(call.blockID).getSprites()[call.variantID], xPos + cameraX, (height - y * 64) + cameraY, 64, 64);
         }
       }
     }
