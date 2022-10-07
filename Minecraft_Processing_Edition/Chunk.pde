@@ -36,12 +36,36 @@ class Chunk {
         n = 0;
       }
 
+      //make the first layer of surface grass
+      //makse the next 4 layers dirt
+      //make layers that are less than 5 but greater than 0 either stone/diamond/iron/coal based on the noise algorithm
+      //make the last layer bedrock (unbreakable)
       Blocks[x][n] = getDrawCallforID("grass.png");
       for (int y = n - 1; y >= 0; y--) {
-        if (y <= n - 3)
-          Blocks[x][y] = getDrawCallforID("stone.png");
-        else
-          Blocks[x][y] = getDrawCallforID("stone.png");
+
+        if (y == 0) {
+          Blocks[x][y] = getDrawCallforID("bedrock.png");
+          continue;
+        }
+
+        if (y <= n - 4) {
+          float nValue = noise(float(xCoord * 64 + x) * 1.1f, float(y * 64) * 1.1f) * 100f;
+          if (nValue < 60) {
+            Blocks[x][y] = getDrawCallforID("stone.png");
+          } else {
+            if (nValue >= 90 && y > 25) {
+              Blocks[x][y] = getDrawCallforID("diamond.png");
+            } else if (nValue >= 70) {
+              Blocks[x][y] = getDrawCallforID("iron.png");
+            } else {
+              Blocks[x][y] = getDrawCallforID("coal.png");
+            }
+          }
+
+          continue;
+        }
+
+        Blocks[x][y] = getDrawCallforID("dirt.png");
       }
     }
   }

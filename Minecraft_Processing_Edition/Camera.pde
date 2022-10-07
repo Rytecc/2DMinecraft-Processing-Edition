@@ -21,5 +21,10 @@ void moveCamera() {
     }
   }
 
+  //lower camera limit
+  if(cameraY < -35) {
+    cameraY = -35;
+  }
+
   cameraXCoord = cameraX / (64 * chunkWidth);
 }

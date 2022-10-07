@@ -12,6 +12,7 @@ void setup() {
 
   // set screen default size
   fullScreen();
+  frameRate(165);
 
   // Initialise the assets interface
   assetsManager = new Assets("2D-Minecraft-Processing-Edition");
