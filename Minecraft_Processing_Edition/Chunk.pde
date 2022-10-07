@@ -18,6 +18,7 @@ class BlockDrawCall {
 class Chunk {
   public BlockDrawCall[][] Blocks;
   private int xCoord;
+  private boolean ready;
   public Chunk(int xCoord) {
     this.xCoord = xCoord;
     Blocks = new BlockDrawCall[chunkWidth][chunkHeight];
@@ -50,24 +51,31 @@ class Chunk {
 
         if (y <= n - 4) {
           float nValue = noise(float(xCoord * 64 + x) * 1.1f, float(y * 64) * 1.1f) * 100f;
-          if (nValue < 60) {
+
+          if (y > n - 8) {
             Blocks[x][y] = getDrawCallforID("stone.png");
           } else {
-            if (nValue >= 90 && y > 25) {
-              Blocks[x][y] = getDrawCallforID("diamond.png");
-            } else if (nValue >= 70) {
-              Blocks[x][y] = getDrawCallforID("iron.png");
+            if (nValue < 60) {
+              Blocks[x][y] = getDrawCallforID("stone.png");
             } else {
-              Blocks[x][y] = getDrawCallforID("coal.png");
+              if (nValue >= 80 && y < 25) {
+                Blocks[x][y] = getDrawCallforID("diamond.png");
+              } else if (nValue >= 70) {
+                Blocks[x][y] = getDrawCallforID("iron.png");
+              } else {
+                Blocks[x][y] = getDrawCallforID("coal.png");
+              }
             }
           }
-
+          
           continue;
         }
 
         Blocks[x][y] = getDrawCallforID("dirt.png");
       }
     }
+
+    ready = true;
   }
 
   BlockDrawCall getDrawCallforID(String id) {
@@ -76,6 +84,11 @@ class Chunk {
   }
 
   void drawChunk() {
+
+    if (!ready) {
+      return;
+    }
+
     for (int x = 0; x < Blocks.length; x++) {
       for (int y = 0; y < Blocks[x].length; y++) {
         int xPos = (xCoord * chunkWidth + x) * 64;

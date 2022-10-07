@@ -1,6 +1,8 @@
-//Lucas Soliman
-// Minecraft Processing Edition
-// This file delegates all core functionalities of game.
+/*
+Lucas Soliman
+ Minecraft Processing Edition
+ This file delegates all core functionalities of game.
+ */
 
 public static final int renderWidth = 4;
 
@@ -12,7 +14,7 @@ void setup() {
 
   // set screen default size
   fullScreen();
-  frameRate(165);
+  frameRate(60);
 
   // Initialise the assets interface
   assetsManager = new Assets("2D-Minecraft-Processing-Edition");
@@ -23,8 +25,12 @@ void setup() {
 
   //Create the initial generation
   for (int x = -renderWidth * 10; x <= renderWidth * 10; x++) {
-    chunks.put(x, new Chunk(x));
+    thread("generateChunk");
   }
+}
+
+public void createChunk(int x) {
+  chunks.put(x, new Chunk(x));
 }
 
 void draw() {

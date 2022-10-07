@@ -1,3 +1,8 @@
+/*Lucas Soliman
+This class stores multiple sprites in an array.
+This class supports 2D sprite animation
+sprites array is populated via the BlockLoader atlases
+*/
 class AnimatedImage {
   private PImage[] sprites;
   private float tileRate;

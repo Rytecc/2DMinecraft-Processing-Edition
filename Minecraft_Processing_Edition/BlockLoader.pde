@@ -1,3 +1,7 @@
+/*
+This class stores all blocks using their filename as their keys.
+TODO: convert from string key to int key for memory optimization
+*/
 class Blocks {
   public HashMap<String, AnimatedImage> blocks;
 
